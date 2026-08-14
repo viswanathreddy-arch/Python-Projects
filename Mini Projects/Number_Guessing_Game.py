@@ -10,7 +10,12 @@ while True:
     count = 0
 
     while True:
-        user_guess = int(input("Enter Number b/w (1-100): "))
+        try:
+            user_guess = int(input("Enter Number b/w (1-100): "))
+        except ValueError:
+            print("Please enter a valid number!")
+            continue
+
         count += 1
 
         if user_guess > number:
