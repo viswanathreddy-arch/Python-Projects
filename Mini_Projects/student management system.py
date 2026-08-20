@@ -1,88 +1,91 @@
-import json
+import csv
+import os
 
 print("="*40)
 print("STUDENT MANAGEMENT SYSTEM")
 print("="*40)
 
-students = {}
+students = []
 
 while True:
-        print()
-        print("----Menu----")
-        print(" 1. Add Student")
-        print(" 2. View All Student")
-        print(" 3. Search Student")
-        print(" 4. Delete Student")
-        print(" 5. Analytic Dashboard")
-        print(" 6. Grade Report")
-        print(" 7. Export Summary")
-        print(" 8. Exit")
-        print()
+    print()
+    print("----Menu----")
+    print(" 1. Add Student")
+    print(" 2. View All Student")
+    print(" 3. Search Student")
+    print(" 4. Delete Student")
+    print(" 5. Analytic Dashboard")
+    print(" 6. Grade Report")
+    print(" 7. Export Summary")
+    print(" 8. Exit")
+    print()
 
-        try:
-                choice = int(input("Enter Your Choice: "))
-        except ValueError:
-                print("Enter Valid Numbers!")
+    try:
+        choice = int(input("Enter Your Choice: "))
+    except ValueError:
+        print("Enter Valid Numbers!")
 
         # Add Student in dictionary
-        if choice == 1:
-                print("Add Student Details....")
-                name = input("Student Name: ").title()
-                age = int(input("Student Age: "))
-                city = input("Student City: ").title()
+    if choice == 1:
+        print("Add Student Details....")
+        print()
 
-                students[name] = {
-                                  "Age": age,
-                                  "City": city,
-                                  "Marks": {}
-                                  }
+        name = input("Student Name: ").title()
+        age = int(input("Student Age: "))
+        city = input("Student City: ").title()
+        math = int(input("Enter Math Marks: "))
+        science = int(input("Enter Science Marks: "))
+        python = int(input("Enter Python Marks: "))
 
-                subjects = ["Math", "Science", "Python"]
-                marks = list(map(int, input("Enter three subject marks(math, science, python): ").split()))
+        student = {
+                "Name" : name,
+                "Age"  : age,
+                "Math" : math,
+                "Science" : science,
+                "Python" : python,
+                "City" : city
+            }
+        students.append(student)
 
-                if len(marks) == len(subjects):
-                        for subject, mark in zip(subjects, marks):
-                                students[name]["Marks"][subject] = mark
-                        print(students)
-                                        
-                else:
-                        print("Marks should be 3 subjects only, try again!")
+        file_exists = os.path.exists("Student Management.csv")
 
-                for subject, mark in zip(subjects, marks):
-                        details = {
-                                "Name" : name,
-                                "Age" : age,
-                                "city" : city,
-                                
-                        }
+        with open("Student Management.csv", "a", newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=["Name", "Age", "Math", "Science", "Python", "City"])
 
-                with open("Students Details.json", 'a') as f:
-                        json.dump(students, f, indent=2)
-                print("Saved in Json File")
+            if not file_exists or os.path.getsize("Student Management.csv") == 0:
+                writer.writeheader()
+
+            writer.writerows(students)
+                
 
         # view all students in dictionary
-        elif choice == 2:
-                for name, info in students.items():
-                        print(f"{name}: {info}")
+    elif choice == 2:
+        with open("Student Management.csv", "r") as file:
+            reader = csv.DictReader(file)
+
+            for read in reader:
+                print(read)
 
         # search the student in dictionary
-        elif choice == 3:
-                name = input("Enter Student Name: ").title()
-                for names, info in students.items():
-                        if name == names:
-                                print(f"{names}: {info}")
-                        else:
-                                print("Name doesn't exist")
+    elif choice == 3:
+        search = input("Enter Name: ").title()
 
+        with open("Student Management.csv", "r") as file:
+            reader = csv.DictReader(file)
 
-        else:
-                print("Enter valid number!")
+            for student in reader:
+                if search == student["Name"]:
+                    print(student)
+                    break
+                else:
+                    print("Name not Found!")
+        
 
-        choss = input("enter your choise(y/n): ")
-        if choss == "n":
-                break
-        elif choss != "y":
-                print("Enter only (Yes/No)")
+    chosse = input("enter your choise(y/n): ")
+    if chosse == "n":
+        break
+    elif chosse != "y":
+        print("Enter only (Yes/No)")
 
 
 
