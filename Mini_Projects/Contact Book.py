@@ -90,15 +90,15 @@ while True:
             reader = csv.DictReader(f)
 
             for contact in reader:
-                contacts.append(new_contacts)
+                new_contacts.append(contact)
 
         search = input("Enter Name: ").title()
 
         found = False
 
         for contact in read:
-            if search == contact["name"]:
-                contacts.remove(contact)
+            if search == new_contacts["name"]:
+                new_contacts.remove(contact)
                 found = True
                 break
 
@@ -110,7 +110,7 @@ while True:
 
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()
-                writer.writerows(contacts)
+                writer.writerows(new_contacts)
 
     elif user == 5:
         break

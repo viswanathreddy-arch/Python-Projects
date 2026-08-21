@@ -79,6 +79,37 @@ while True:
                     break
                 else:
                     print("Name not Found!")
+
+    elif choice == 4:
+
+        students = []
+
+        search = input("Enter Name: ").title()
+
+        with open("Student Management.csv", "r") as file:
+            reader = csv.DictReader(file)
+
+            for student in reader:
+                students.append(student)
+
+            found = False
+
+            for student in reader:
+                if search == student["Name"]:
+                    students.remove(student)
+                    found = True
+                    break
+
+            if not found:
+                print("Name not Found!...")
+            else:
+                with open("Student Management.csv", "w", newline="") as file:
+                    writer = csv.DictWriter(file, fieldnames=["Name", "Age", "Math", "Science", "Python", "City"])
+
+                    writer.writeheader()
+                    writer.writerow(students)
+
+                print("Succefully Deleted!")
         
 
     chosse = input("enter your choise(y/n): ")
